@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import axios from 'axios';
+import Form from './components/Form';
+import Result from './components/Result';
+import Giphy from './components/Giphy';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gifs: [],
+    };
+  }
+
+  searchGifsTenor = (str) => {
+    axios
+      .get(`https://g.tenor.com/v1/search?&q=${str}&key=VDGMP3TAE1BE`)
+      .then((result) =>
+        this.setState({
+          gifs: result.data.results,
+        })
+      );
+  };
+
+  render() {
+    return (
+      <div className="App">
+        <div className="Tenor">
+          <h1>Rechercher un GIF sur Tenor</h1>
+          <Form search={this.searchGifsTenor} />
+          <Result gifs={this.state.gifs} />
+        </div>
+        <div className="Giphy">
+          <h1>Rechercher un GIF sur Giphy</h1>
+          <Giphy />
+        </div>
+      </div>
+    );
+  }
 }
 
 export default App;
